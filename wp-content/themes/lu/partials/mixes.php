@@ -14,6 +14,7 @@
       $mix_djs = get_sub_field('djs');
       $mix_image_obj = get_sub_field('image');
       $mix_image = wp_get_attachment_image_src($mix_image_obj['ID'], 'small');
+      $mix_image_download = wp_get_attachment_image_src($mix_image_obj['ID'], 'full');
       $mix_cover_url = !empty($mix_image) ? $mix_image[0] : "/wp-content/uploads/2017/11/lu_cover_placeholder.png";
       $mix_link = get_sub_field('link');
       
@@ -33,8 +34,12 @@
           </h3>
           <h5 class="mix__djs bodytext"><?php echo $mix_djs; ?></h5>
           <p class="mix__tracklist">
-            <a href="" target="_blank">tracklist</a> /
-            <a href="" target="_blank">cover</a>
+            <?php if (!empty($mix_tracklist['url'])): ?>
+              <a href="<?php echo $mix_tracklist['url']; ?>" target="_blank">tracklist</a> /
+            <?php endif; ?>
+            <?php if (!empty($mix_image)): ?>
+              <a href="<?php echo $mix_image_download[0]; ?>" target="_blank">cover</a>
+            <?php endif; ?>
           </p>
         </div>
 
