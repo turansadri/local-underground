@@ -1,5 +1,6 @@
 .DS_Store
 wp-config.php
-db
-.node_modules
+/db/
+/node_modules/
 docker-compose.yml
+
