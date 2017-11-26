@@ -1,0 +1,32 @@
+h1, .h1,
+h2, .h2,
+h3, .h3,
+h4, .h4,
+h5, .h5,
+h6, .h6 {
+  font-family: "Platform";
+  color: $heading_color;
+  margin: 0 0 0.5em;
+  line-height: 1em;
+  font-weight: 500;
+  -webkit-font-smoothing: subpixel-antialiased;
+  .light {
+    font-weight: 200;
+  }
+  &.bodytext {
+    font-family: $font-family-base;
+  }
+}
+h1, .h1 {
+  font-size: 6rem;
+  @media (min-width: $breakpoint-sm) {
+    font-size: 8rem;
+  }
+}
+h2, .h2 {
+  font-size: 4rem;
+}
+.section-heading {
+  // text-transform: uppercase;
+  font-weight: 300;
+}

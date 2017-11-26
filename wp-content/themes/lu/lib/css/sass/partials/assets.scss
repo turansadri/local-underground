@@ -1,0 +1,33 @@
+.iconpath {
+  fill: rgba($text-color, 0.5);
+}
+@keyframes bganim {
+  from {
+    background-position: right -10% top -50%;
+  }
+  to {
+    background-position: right -10% top 120px;
+  }
+}
+@media (min-width: $breakpoint-sm) {
+  @keyframes bganim {
+    from {
+      background-position: right 30px top -10%;
+    }
+    to {
+      background-position: right 30px top 130px;
+    }
+  }
+}
+.wrapper {
+  background-image: url(../../img/bg-heart.svg);
+  background-position: right -10% top 120px;
+  background-size: 66% auto;
+  background-repeat: no-repeat;
+  animation: bganim 4s linear;
+  @media (min-width: $breakpoint-sm) {
+    animation: bganim 3s linear;
+    background-position: right 30px top 130px;
+    background-size: 40% auto;
+  }
+}

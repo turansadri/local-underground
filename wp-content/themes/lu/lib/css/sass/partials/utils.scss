@@ -1,0 +1,49 @@
+/**
+ * partials/utils
+ * ---
+ * Utils classes
+ */
+
+
+// clearfix: http://nicolasgallagher.com/micro-clearfix-hack/
+.clear {
+  &:before,
+  &:after {
+    content: " ";
+    display: table;
+  }
+
+  &:after {
+    clear: both;
+  }
+}
+
+.reset-box {
+  @include reset-box;
+}
+.section-padding {
+  padding: 3em 0;
+}
+.margin-bottom-xs {
+  @media (max-width: $breakpoint-xs) {
+    margin-bottom: 1em;
+  }
+}
+.content-padding-xs {
+  @media (min-width: $breakpoint-xs) {
+    padding: 0 1.5em;
+  }
+}
+.content-padding-sm {
+  @media (min-width: $breakpoint-sm) {
+    padding: 0 1.5em;
+  }
+}
+.content-padding-md {
+  @media (min-width: $breakpoint-md) {
+    padding: 0 1.5em;
+  }
+}
+.content-padding {
+  padding: 0 1em;
+}

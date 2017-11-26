@@ -1,0 +1,22 @@
+/**
+ * partials/footer
+ * ---
+ */
+
+
+.footer-nav {
+  margin: 0;
+  padding: 0;
+  list-style-type: none;
+  text-align: center;
+  .footer-nav__link {
+    display: inline-block;
+    margin-right: 6px;
+    &:first-child {
+      &:after { 
+        margin-left: 10px;
+        content: "•";
+      }
+    }
+  }
+}
