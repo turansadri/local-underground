@@ -14,23 +14,3 @@ body {
   padding-top: 5em;
   min-height: 1000px;
 }
-.logo-container {
-  position: absolute;
-  width: 600px;
-  right: 2em;
-  bottom: 0;
-  .logo-stem {
-    margin-top: -1em;
-    width: 100%;
-    min-height: 0px;
-    background: url('../../img/logo-heart-stem.svg');
-    transition: min-height 6s ease-out;
-  }
-}
-.dom-loaded {
-  .logo-container {
-    .logo-stem {
-      min-height: 1300px;
-    }
-  }
-}
