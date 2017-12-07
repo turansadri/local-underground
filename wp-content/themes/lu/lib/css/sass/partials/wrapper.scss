@@ -24,7 +24,7 @@ body {
     width: 100%;
     min-height: 0px;
     background: url('../../img/logo-heart-stem.svg');
-    transition: min-height 6s ease;
+    transition: min-height 6s ease-out;
   }
 }
 .dom-loaded {

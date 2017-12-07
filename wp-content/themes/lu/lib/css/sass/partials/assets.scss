@@ -24,9 +24,9 @@
   background-position: right -10% top 120px;
   background-size: 66% auto;
   background-repeat: no-repeat;
-  animation: bganim 4s linear;
+  animation: bganim 4s ease-in-out;
   @media (min-width: $breakpoint-sm) {
-    animation: bganim 3s linear;
+    animation: bganim 3s ease-in-out;
     background-position: right 30px top 130px;
     background-size: 40% auto;
   }
