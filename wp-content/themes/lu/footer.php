@@ -3,7 +3,7 @@
 
 				<ul class="footer-nav">
 					<li class="footer-nav__link"><a href="https://www.facebook.com/localundergroundhki/" target="_blank">Check us out at Facebook</a></li>
-					<li class="footer-nav__link"><a href="https:/localunderground.spreadshirt.fi/" target="_blank">LU Merchandise Store</a></li>
+					<li class="footer-nav__link"><a href="https://localunderground.spreadshirt.fi/" target="_blank">LU Merchandise Store</a></li>
 				</ul>
 
 			</footer>
