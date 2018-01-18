@@ -1,5 +1,61 @@
 <?php
 // Register Custom Post Type
+function custom_post_type_mixes() {
+
+	$labels = array(
+		'name'                  => _x( 'Mixes', 'Post Type General Name', 'lu' ),
+		'singular_name'         => _x( 'Mix', 'Post Type Singular Name', 'lu' ),
+		'menu_name'             => __( 'Mixes', 'lu' ),
+		'name_admin_bar'        => __( 'Mix', 'lu' ),
+		'archives'              => __( 'Mix archives', 'lu' ),
+		'attributes'            => __( 'Mix attributes', 'lu' ),
+		'parent_item_colon'     => __( 'Parent mix:', 'lu' ),
+		'all_items'             => __( 'All mixes', 'lu' ),
+		'add_new_item'          => __( 'Add new mix', 'lu' ),
+		'add_new'               => __( 'Add New', 'lu' ),
+		'new_item'              => __( 'New mix', 'lu' ),
+		'edit_item'             => __( 'Edit mix', 'lu' ),
+		'update_item'           => __( 'Update mix', 'lu' ),
+		'view_item'             => __( 'View mix', 'lu' ),
+		'view_items'            => __( 'View mixes', 'lu' ),
+		'search_items'          => __( 'Search mix', 'lu' ),
+		'not_found'             => __( 'Not found', 'lu' ),
+		'not_found_in_trash'    => __( 'Not found in Trash', 'lu' ),
+		'featured_image'        => __( 'Featured Image', 'lu' ),
+		'set_featured_image'    => __( 'Set featured image', 'lu' ),
+		'remove_featured_image' => __( 'Remove featured image', 'lu' ),
+		'use_featured_image'    => __( 'Use as featured image', 'lu' ),
+		'insert_into_item'      => __( 'Insert into mix', 'lu' ),
+		'uploaded_to_this_item' => __( 'Uploaded to this mix', 'lu' ),
+		'items_list'            => __( 'Mixes list', 'lu' ),
+		'items_list_navigation' => __( 'Mixes list navigation', 'lu' ),
+		'filter_items_list'     => __( 'Filter mixes list', 'lu' ),
+	);
+	$args = array(
+		'label'                 => __( 'Mix', 'lu' ),
+		'description'           => __( 'Post Type Description', 'lu' ),
+		'labels'                => $labels,
+		'supports'              => array( 'title', 'editor', 'thumbnail' ),
+		'taxonomies'            => array( 'post_tag' ),
+		'hierarchical'          => false,
+		'public'                => true,
+		'show_ui'               => true,
+		'show_in_menu'          => true,
+		'menu_position'         => 5,
+		'menu_icon'							=> 'dashicons-album',
+		'show_in_admin_bar'     => true,
+		'show_in_nav_menus'     => true,
+		'can_export'            => true,
+		'has_archive'           => false,
+		'exclude_from_search'   => false,
+		'publicly_queryable'    => true,
+		'capability_type'       => 'page',
+	);
+	register_post_type( 'mix', $args );
+
+}
+
+// Register Custom Post Type
 function custom_post_type_events() {
 
 	$labels = array(
@@ -44,6 +100,7 @@ function custom_post_type_events() {
 		'menu_position'         => 5,
 		'show_in_admin_bar'     => true,
 		'show_in_nav_menus'     => true,
+		'menu_icon'							=> 'dashicons-calendar-alt',
 		'can_export'            => true,
 		'has_archive'           => true,
 		'exclude_from_search'   => false,
@@ -61,5 +118,6 @@ function events_redirect_post() {
     exit;
   }
 }
+add_action( 'init', 'custom_post_type_mixes', 0 );
 add_action( 'init', 'custom_post_type_events', 0 );
 add_action( 'template_redirect', 'events_redirect_post' );
