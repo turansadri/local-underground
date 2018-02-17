@@ -26,7 +26,7 @@
         $mix_cover_url = !empty($mix_image) ? $mix_image[0] : "/wp-content/uploads/2017/11/lu_cover_placeholder.png";
         $mix_link = get_field('mix_link-to-audio');
 
-        ?>
+        if (!empty($mix_link)): ?>
 
           <div class="mix">
             <div class="mix__image">
@@ -52,7 +52,8 @@
           </div>
 
 
-      <?php 
+      <?php
+        endif;
         endforeach;
         echo '</div>';
         endif;
