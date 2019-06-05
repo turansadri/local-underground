@@ -1,175 +1,234 @@
 /* global _wpmejsSettings, MediaElementPlayer */
 
-(function ($, _, Backbone) {
-	'use strict';
+(function($, _, Backbone) {
+  'use strict';
 
-	var WPPlaylistView = Backbone.View.extend({
-		initialize : function (options) {
-			this.index = 0;
-			this.settings = {};
-			this.data = options.metadata || $.parseJSON( this.$('script.wp-playlist-script').html() );
-			this.playerNode = this.$( this.data.type );
+  /** @namespace wp */
+  window.wp = window.wp || {};
 
-			this.tracks = new Backbone.Collection( this.data.tracks );
-			this.current = this.tracks.first();
+  var WPPlaylistView = Backbone.View.extend(
+    /** @lends WPPlaylistView.prototype */ {
+      /**
+       * @constructs
+       *
+       * @param {Object} options          The options to create this playlist view with.
+       * @param {Object} options.metadata The metadata
+       */
+      initialize: function(options) {
+        this.index = 0;
+        this.settings = {};
+        this.data =
+          options.metadata ||
+          $.parseJSON(this.$('script.wp-playlist-script').html());
+        this.playerNode = this.$(this.data.type);
 
-			if ( 'audio' === this.data.type ) {
-				this.currentTemplate = wp.template( 'wp-playlist-current-item' );
-				this.currentNode = this.$( '.wp-playlist-current-item' );
-			}
+        this.tracks = new Backbone.Collection(this.data.tracks);
+        this.current = this.tracks.first();
 
-			this.renderCurrent();
+        if ('audio' === this.data.type) {
+          this.currentTemplate = wp.template('wp-playlist-current-item');
+          this.currentNode = this.$('.wp-playlist-current-item');
+        }
 
-			if ( this.data.tracklist ) {
-				this.itemTemplate = wp.template( 'wp-playlist-item' );
-				this.playingClass = 'wp-playlist-playing';
-				this.renderTracks();
-			}
+        this.renderCurrent();
 
-			this.playerNode.attr( 'src', this.current.get( 'src' ) );
+        if (this.data.tracklist) {
+          this.itemTemplate = wp.template('wp-playlist-item');
+          this.playingClass = 'wp-playlist-playing';
+          this.renderTracks();
+        }
 
-			_.bindAll( this, 'bindPlayer', 'bindResetPlayer', 'setPlayer', 'ended', 'clickTrack' );
+        this.playerNode.attr('src', this.current.get('src'));
 
-			if ( ! _.isUndefined( window._wpmejsSettings ) ) {
-				this.settings = _.clone( _wpmejsSettings );
-			}
-			this.settings.success = this.bindPlayer;
-			this.setPlayer();
-		},
+        _.bindAll(
+          this,
+          'bindPlayer',
+          'bindResetPlayer',
+          'setPlayer',
+          'ended',
+          'clickTrack',
+        );
 
-		bindPlayer : function (mejs) {
-			this.mejs = mejs;
-			this.mejs.addEventListener( 'ended', this.ended );
-		},
+        if (!_.isUndefined(window._wpmejsSettings)) {
+          this.settings = _.clone(_wpmejsSettings);
+        }
+        this.settings.success = this.bindPlayer;
+        this.setPlayer();
+      },
 
-		bindResetPlayer : function (mejs) {
-			this.bindPlayer( mejs );
-			this.playCurrentSrc();
-		},
+      bindPlayer: function(mejs) {
+        this.mejs = mejs;
+        this.mejs.addEventListener('ended', this.ended);
+      },
 
-		setPlayer: function (force) {
-			if ( this.player ) {
-				this.player.pause();
-				this.player.remove();
-				this.playerNode = this.$( this.data.type );
-			}
+      bindResetPlayer: function(mejs) {
+        this.bindPlayer(mejs);
+        this.playCurrentSrc();
+      },
 
-			if (force) {
-				this.playerNode.attr( 'src', this.current.get( 'src' ) );
-				this.settings.success = this.bindResetPlayer;
-			}
+      setPlayer: function(force) {
+        if (this.player) {
+          this.player.pause();
+          this.player.remove();
+          this.playerNode = this.$(this.data.type);
+        }
 
-			/**
-			 * This is also our bridge to the outside world
-			 */
-			this.player = new MediaElementPlayer( this.playerNode.get(0), this.settings );
-		},
+        if (force) {
+          this.playerNode.attr('src', this.current.get('src'));
+          this.settings.success = this.bindResetPlayer;
+        }
 
-		playCurrentSrc : function () {
-			this.renderCurrent();
-			this.mejs.setSrc( this.playerNode.attr( 'src' ) );
-			this.mejs.load();
-			this.mejs.play();
-		},
+        // This is also our bridge to the outside world.
+        this.player = new MediaElementPlayer(
+          this.playerNode.get(0),
+          this.settings,
+        );
+      },
 
-		renderCurrent : function () {
-			var dimensions, defaultImage = 'wp-includes/images/media/video.png';
-			if ( 'video' === this.data.type ) {
-				if ( this.data.images && this.current.get( 'image' ) && -1 === this.current.get( 'image' ).src.indexOf( defaultImage ) ) {
-					this.playerNode.attr( 'poster', this.current.get( 'image' ).src );
-				}
-				dimensions = this.current.get( 'dimensions' ).resized;
-				this.playerNode.attr( dimensions );
-			} else {
-				if ( ! this.data.images ) {
-					this.current.set( 'image', false );
-				}
-				this.currentNode.html( this.currentTemplate( this.current.toJSON() ) );
-			}
-		},
+      playCurrentSrc: function() {
+        this.renderCurrent();
+        this.mejs.setSrc(this.playerNode.attr('src'));
+        this.mejs.load();
+        this.mejs.play();
+      },
 
-		renderTracks : function () {
-			var self = this, i = 1, tracklist = $( '<div class="wp-playlist-tracks"></div>' );
-			this.tracks.each(function (model) {
-				if ( ! self.data.images ) {
-					model.set( 'image', false );
-				}
-				model.set( 'artists', self.data.artists );
-				model.set( 'index', self.data.tracknumbers ? i : false );
-				tracklist.append( self.itemTemplate( model.toJSON() ) );
-				i += 1;
-			});
-			this.$el.append( tracklist );
+      renderCurrent: function() {
+        var dimensions,
+          defaultImage = 'wp-includes/images/media/video.png';
+        if ('video' === this.data.type) {
+          if (
+            this.data.images &&
+            this.current.get('image') &&
+            -1 === this.current.get('image').src.indexOf(defaultImage)
+          ) {
+            this.playerNode.attr('poster', this.current.get('image').src);
+          }
+          dimensions = this.current.get('dimensions').resized;
+          this.playerNode.attr(dimensions);
+        } else {
+          if (!this.data.images) {
+            this.current.set('image', false);
+          }
+          this.currentNode.html(this.currentTemplate(this.current.toJSON()));
+        }
+      },
 
-			this.$( '.wp-playlist-item' ).eq(0).addClass( this.playingClass );
-		},
+      renderTracks: function() {
+        var self = this,
+          i = 1,
+          tracklist = $('<div class="wp-playlist-tracks"></div>');
+        this.tracks.each(function(model) {
+          if (!self.data.images) {
+            model.set('image', false);
+          }
+          model.set('artists', self.data.artists);
+          model.set('index', self.data.tracknumbers ? i : false);
+          tracklist.append(self.itemTemplate(model.toJSON()));
+          i += 1;
+        });
+        this.$el.append(tracklist);
 
-		events : {
-			'click .wp-playlist-item' : 'clickTrack',
-			'click .wp-playlist-next' : 'next',
-			'click .wp-playlist-prev' : 'prev'
-		},
+        this.$('.wp-playlist-item')
+          .eq(0)
+          .addClass(this.playingClass);
+      },
 
-		clickTrack : function (e) {
-			e.preventDefault();
+      events: {
+        'click .wp-playlist-item': 'clickTrack',
+        'click .wp-playlist-next': 'next',
+        'click .wp-playlist-prev': 'prev',
+      },
 
-			this.index = this.$( '.wp-playlist-item' ).index( e.currentTarget );
-			this.setCurrent();
-		},
+      clickTrack: function(e) {
+        e.preventDefault();
 
-		ended : function () {
-			if ( this.index + 1 < this.tracks.length ) {
-				this.next();
-			} else {
-				this.index = 0;
-				this.setCurrent();
-			}
-		},
+        this.index = this.$('.wp-playlist-item').index(e.currentTarget);
+        this.setCurrent();
+      },
 
-		next : function () {
-			this.index = this.index + 1 >= this.tracks.length ? 0 : this.index + 1;
-			this.setCurrent();
-		},
+      ended: function() {
+        if (this.index + 1 < this.tracks.length) {
+          this.next();
+        } else {
+          this.index = 0;
+          this.setCurrent();
+        }
+      },
 
-		prev : function () {
-			this.index = this.index - 1 < 0 ? this.tracks.length - 1 : this.index - 1;
-			this.setCurrent();
-		},
+      next: function() {
+        this.index = this.index + 1 >= this.tracks.length ? 0 : this.index + 1;
+        this.setCurrent();
+      },
 
-		loadCurrent : function () {
-			var last = this.playerNode.attr( 'src' ) && this.playerNode.attr( 'src' ).split('.').pop(),
-				current = this.current.get( 'src' ).split('.').pop();
+      prev: function() {
+        this.index =
+          this.index - 1 < 0 ? this.tracks.length - 1 : this.index - 1;
+        this.setCurrent();
+      },
 
-			this.mejs && this.mejs.pause();
+      loadCurrent: function() {
+        var last =
+            this.playerNode.attr('src') &&
+            this.playerNode
+              .attr('src')
+              .split('.')
+              .pop(),
+          current = this.current
+            .get('src')
+            .split('.')
+            .pop();
 
-			if ( last !== current ) {
-				this.setPlayer( true );
-			} else {
-				this.playerNode.attr( 'src', this.current.get( 'src' ) );
-				this.playCurrentSrc();
-			}
-		},
+        this.mejs && this.mejs.pause();
 
-		setCurrent : function () {
-			this.current = this.tracks.at( this.index );
+        if (last !== current) {
+          this.setPlayer(true);
+        } else {
+          this.playerNode.attr('src', this.current.get('src'));
+          this.playCurrentSrc();
+        }
+      },
 
-			if ( this.data.tracklist ) {
-				this.$( '.wp-playlist-item' )
-					.removeClass( this.playingClass )
-					.eq( this.index )
-						.addClass( this.playingClass );
-			}
+      setCurrent: function() {
+        this.current = this.tracks.at(this.index);
 
-			this.loadCurrent();
-		}
-	});
+        if (this.data.tracklist) {
+          this.$('.wp-playlist-item')
+            .removeClass(this.playingClass)
+            .eq(this.index)
+            .addClass(this.playingClass);
+        }
 
-    $(document).ready(function () {
-		$('.wp-playlist').each( function() {
-			return new WPPlaylistView({ el: this });
-		} );
+        this.loadCurrent();
+      },
+    },
+  );
+
+  /**
+   * Initialize media playlists in the document.
+   *
+   * Only initializes new playlists not previously-initialized.
+   *
+   * @since 4.9.3
+   * @returns {void}
+   */
+  function initialize() {
+    $('.wp-playlist:not(:has(.mejs-container))').each(function() {
+      new WPPlaylistView({ el: this });
     });
+  }
 
-	window.WPPlaylistView = WPPlaylistView;
+  /**
+   * Expose the API publicly on window.wp.playlist.
+   *
+   * @namespace wp.playlist
+   * @since 4.9.3
+   * @type {object}
+   */
+  window.wp.playlist = {
+    initialize: initialize,
+  };
 
-}(jQuery, _, Backbone));
+  $(document).ready(initialize);
+
+  window.WPPlaylistView = WPPlaylistView;
+})(jQuery, _, Backbone);
