@@ -20,8 +20,11 @@
   <div class="section-padding clear">
     <h2 class="section-heading">Future</h2>
     <?php 
+      $i = 0;
+
       foreach ($future_events as $event):
         include(get_template_directory() . '/partials/event.php');
+        $i++;
       endforeach;
 
       wp_reset_postdata(); unset($past_event); ?>
