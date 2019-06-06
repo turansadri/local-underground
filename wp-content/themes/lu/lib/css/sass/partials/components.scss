@@ -127,6 +127,7 @@
     flex-wrap: wrap;
     border-bottom: 1px solid #333366;
     margin-bottom: 1em;
+    padding-bottom: 1em;
     &:last-child {
       border: none;
     }
@@ -139,9 +140,6 @@
       span {
         font-weight: 200;
       }
-    }
-    .event__content {
-      padding-bottom: 1em;
     }
     .event__info {
       opacity: 0.5;
