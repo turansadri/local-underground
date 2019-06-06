@@ -9,7 +9,8 @@
   $event_time = get_field('event_time');
   $event_venue_name = get_field('event_venue');
   $event_venue_url = get_field('event_venue_link');
-  $event_img_src = wp_get_attachment_image_src(get_post_thumbnail_id($post), 'medium'); ?>
+  $event_img_src = wp_get_attachment_image_src(get_post_thumbnail_id($post), 'medium');
+  $event_description = get_the_content(); ?>
 
   <div class="event <?php if ( !empty($event_img_src) && !$past_event && $i == 0 ): ?>event--withmedia<?php endif; ?> row">
       <?php if ( !empty($event_img_src) && !$past_event && $i == 0 ): ?>
@@ -26,7 +27,7 @@
           </a>
         </h3>
       </div>
-      <div class="event__description">
+      <div class="event__info">
         <p>
           <?php if (!empty($event_date)): ?>
             <span class="event__date">
@@ -53,9 +54,10 @@
           <?php endif; ?>
         </p>
       </div>
-      
-      <?php if (!$past_event): ?>
-        <?php the_content(); ?>
+      <?php if (!$past_event && !empty($event_description)): ?>
+        <div class="event__description">
+          <?= $event_description; ?>
+        </div>
       <?php endif; ?>
     </div>
   </div>

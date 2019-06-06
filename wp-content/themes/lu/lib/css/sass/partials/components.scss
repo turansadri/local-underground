@@ -140,9 +140,18 @@
         font-weight: 200;
       }
     }
-    .event__description {
+    .event__content {
+      padding-bottom: 1em;
+    }
+    .event__info {
       opacity: 0.5;
       font-size: 1.8rem;
+      p:last-child {
+        margin-bottom: 0;
+      }
+    }
+    .event__description {
+      margin-top: 1em;
     }
     &.event--withmedia {
       .event__media {
